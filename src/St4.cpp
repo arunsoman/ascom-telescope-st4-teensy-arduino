@@ -1,5 +1,7 @@
 #include <St4.h>
 
+#define DEBUGGER Serial2
+
 St4::St4(Axis ra, Axis dec):
 ra(ra), dec(dec){
     OK = "OK#";
@@ -21,7 +23,8 @@ void St4::setup(){
     dec.setup();
 }
 String St4::process(String opcode){
-    //Parse opcode
+    DEBUGGER.print("Parse opcode ");
+    DEBUGGER.print( opcode);
     if(opcode=="CONNECT"){
       reset();
     }
@@ -47,7 +50,9 @@ String St4::process(String opcode){
       dec.minus();
     }
     else{
+      DEBUGGER.println(KO);
       return KO;
     }
+    DEBUGGER.println(OK);
     return OK ;
 }

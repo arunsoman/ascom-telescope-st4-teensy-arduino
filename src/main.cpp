@@ -2,21 +2,37 @@
 #include <Axis.h>
 #include <St4.h>
 
-class Axis ra(
-2,//RA+ pin
-5);//RA- pin
-class Axis dec(
-3,//DEC+ pin
-4);//DEC- pin
+#define DEBUGGER Serial2
+#define RA_PLUS 2
+#define RA_MINUS 5
+#define DEC_PLUS 3
+#define DEC_MINUS 4
+
+void printRA_DEC(){
+  DEBUGGER.print("RA: plusPin=");
+  DEBUGGER.print(RA_PLUS);
+  DEBUGGER.print(" minusPin=");
+  DEBUGGER.println(RA_MINUS);
+
+  DEBUGGER.print("DEC: plusPin=");
+  DEBUGGER.print(DEC_PLUS);
+  DEBUGGER.print(" minusPin=");
+  DEBUGGER.println(DEC_MINUS);
+
+}
+class Axis ra(RA_PLUS, RA_MINUS);
+class Axis dec(DEC_PLUS, DEC_MINUS);
 
 class St4 st4(ra, dec);
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(57600);
+  DEBUGGER.begin(500000);
   //Wait for serial port to connect. Needed for Leonardo only
   while (!Serial);
+  while (!DEBUGGER);
   st4.setup();
+  printRA_DEC();
 }
 
 void loop() {
