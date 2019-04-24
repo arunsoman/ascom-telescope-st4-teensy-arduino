@@ -24,6 +24,7 @@ unsigned long age, date, time, chars;
 int year;
 byte month, day, hour, minute, second, hundredths;
 unsigned short sentences, failed;
+
 void gpsdump(TinyGPS &gps)
 {
   gps.get_position(&lat, &lon, &age);
@@ -66,6 +67,7 @@ void setup() {
 
   st4.setup();
   printRA_DEC();
+  tele.init();
 }
 
 void loop() {
@@ -100,6 +102,6 @@ void loop() {
       response = tele.execute(opCode);
     }
     Serial.print(response);
-
+    _l.print("request: {"); _l.print(opCode); _l.print("}, response: { "); _l.print(response);  _l.println("}");
   }
 }

@@ -134,6 +134,8 @@ private:
   static String lng;
   static Adafruit_BNO055 bno;
 
+ 
+
 public:
   Tele(/* args */);
   ~Tele();
@@ -145,6 +147,7 @@ public:
     int index = s.substring(0, 2).toInt();
     return cap[index](s) + EOM;
   }
+  void updateGPS(long&, long&, long&);
 };
 
 #endif

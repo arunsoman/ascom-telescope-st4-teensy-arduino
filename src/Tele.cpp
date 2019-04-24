@@ -115,3 +115,10 @@ String Tele::Tracking_f(String cmd) { return cmd; }
 String Tele::TrackingRate_f(String cmd) { return cmd; }
 String Tele::TrackingRates_f(String cmd) { return cmd; }
 String Tele::UTCDate_f(String cmd) { return cmd; }
+
+
+void Tele::updateGPS(long& a, long& b, long& c){
+    lat=String(a);
+    lng = String(b);
+    alt =String(c);
+}
