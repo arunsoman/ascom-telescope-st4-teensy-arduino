@@ -3,6 +3,7 @@
 
 #include <Axis.h>
 #include <St4.h>
+#include <Tele.h>
 
 #define _l Serial2
 
@@ -12,6 +13,8 @@
 #define DEC_MINUS 4
 
 #define GPS_POWER_PIN 18
+
+Tele tele;
 
 TinyGPS gps;
 HardwareSerial Uart = HardwareSerial();
@@ -93,8 +96,10 @@ void loop() {
   if (Serial.available() > 0) {
     String opCode = Serial.readStringUntil('#');
     String response = st4.process(opCode);
-    if (response == st4.OK) {
-      Serial.print(response);
+    if (response != st4.OK) {
+      response = tele.execute(opCode);
     }
+    Serial.print(response);
+
   }
 }
