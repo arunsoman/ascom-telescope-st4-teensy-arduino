@@ -5,7 +5,9 @@
 #include <St4.h>
 #include <Tele.h>
 
-#define _l Serial2
+#define _sl(x) Serial.print("$$");Serial.print(x);
+#define _l(x) Serial.print(x);
+#define _el(x) Serial.print(x);Serial.print("#");
 
 #define RA_PLUS 2
 #define RA_MINUS 5
@@ -28,43 +30,41 @@ unsigned short sentences, failed;
 void gpsdump(TinyGPS &gps)
 {
   gps.get_position(&lat, &lon, &age);
-  _l.print("Lat/Long(10^-5 deg): "); _l.print(lat); _l.print(", "); _l.println(lon);
+  _sl("Lat/Long(10^-5 deg): "); _l(lat); _l(", "); _el(lon);
 
   gps.get_datetime(&date, &time, &age);
-  _l.print("Date(ddmmyy): "); _l.print(date); _l.print(" Time(hhmmsscc): ");
-  _l.println(time);
+  _sl("Date(ddmmyy): "); _l(date); _l(" Time(hhmmsscc): ");
+  _el(time);
   
   gps.stats(&chars, &sentences, &failed);
-  _l.print("Stats: characters: "); _l.print(chars); _l.print(" sentences: ");
-  _l.print(sentences); _l.print(" failed checksum: "); _l.println(failed);
+  _sl("Stats: characters: "); _l(chars); _l(" sentences: ");
+  _sl(sentences); _l(" failed checksum: "); _el(failed);
   alt=gps.altitude();
-  _l.print("Alt(cm): "); _l.print(alt);
+  _sl("Alt(cm): "); _el(alt);
 }
 
 void printRA_DEC() {
-  _l.print("RA: plusPin="); _l.print(RA_PLUS); _l.print(" minusPin="); _l.println(RA_MINUS);
+  _sl("RA: plusPin="); _l(RA_PLUS); _l(" minusPin="); _el(RA_MINUS);
 
-  _l.print("DEC: plusPin="); _l.print(DEC_PLUS); _l.print(" minusPin="); _l.println(DEC_MINUS);
+  _sl("DEC: plusPin="); _l(DEC_PLUS); _l(" minusPin="); _el(DEC_MINUS);
 }
 class Axis ra(RA_PLUS, RA_MINUS);
 class Axis dec(DEC_PLUS, DEC_MINUS);
 
 class St4 st4(ra, dec);
 
-void setup() {
+void setupGPS(){
   pinMode(GPS_POWER_PIN, OUTPUT);
   digitalWrite(GPS_POWER_PIN, HIGH);
-  Serial.begin(57600);
-  _l.begin(500000);
-  while (!Serial)
-    ;
-  while (!_l)
-    ;
-
   Uart.begin(4800);
-  _l.print("Testing TinyGPS library v. ");
-  _l.println(TinyGPS::library_version());
+  _sl("Testing TinyGPS library v. "); _el(TinyGPS::library_version());
+}
+void setup() {
+  
+  Serial.begin(57600);
+  while (!Serial);
 
+  setupGPS();
   st4.setup();
   printRA_DEC();
   tele.init();
@@ -102,6 +102,6 @@ void loop() {
       response = tele.execute(opCode);
     }
     Serial.print(response);
-    _l.print("request: {"); _l.print(opCode); _l.print("}, response: { "); _l.print(response);  _l.println("}");
+    _sl("request: {"); _l(opCode); _l("}, response: { "); _l(response);  _el("}");
   }
 }
